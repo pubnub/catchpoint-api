@@ -1,5 +1,11 @@
 # catchpoint-api
+[![Build Status](https://travis-ci.org/pubnub/catchpoint-api.svg?branch=master)](https://travis-ci.org/pubnub/catchpoint-api)
+[![codecov](https://codecov.io/gh/pubnub/catchpoint-api/branch/master/graph/badge.svg)](https://codecov.io/gh/pubnub/catchpoint-api)
+[![npm](https://img.shields.io/npm/v/catchpoint-api.svg)]()
+[![Known Vulnerabilities](https://snyk.io/test/npm/catchpoint-api/badge.svg)](https://snyk.io/test/npm/catchpoint-api)
+
 JS based API wrapper to call catchpoint functionality (https://io.catchpoint.com/ui/help)
+
 
 # Contributing
   * Please open PR's against `develop` branch
