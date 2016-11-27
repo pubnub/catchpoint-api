@@ -39,7 +39,13 @@ module.exports = {
     }
 
     if (requestConfig.authToken) {
-      request.set('Authorization', `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`);
+      const authHeader = `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`;
+
+      if (requestConfig.debug) {
+        console.log({ authHeader }); // eslint-disable-line no-console
+      }
+
+      request.set('Authorization', authHeader);
     }
 
     request
