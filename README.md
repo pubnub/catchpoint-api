@@ -42,7 +42,7 @@ JS based API wrapper to call catchpoint functionality (https://io.catchpoint.com
   const CatchPointAPI = require('catchpoint-api');
   const catchPoint = new CatchPointAPI();
 
-  catchPoint.authorize({
+  catchPoint.authorization.createSession({
     clientId: 'myClientId',
     clientSecret: 'myClientSecret'
   }).then((response) => {
