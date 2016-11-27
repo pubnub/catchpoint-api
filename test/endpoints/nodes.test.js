@@ -7,7 +7,6 @@ const nock = require('nock');
 const assert = require('assert');
 
 describe('nodes API', () => {
-
   this.apiInstance = null;
 
   beforeEach(() => {
@@ -50,7 +49,6 @@ describe('nodes API', () => {
           done();
         });
     });
-
   });
 
   describe('#getAll', () => {
