@@ -4,9 +4,6 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "scripts": {
     "codecov": "cat coverage/lcov.info | codecov"
   },
   "repository": {
@@ -31,6 +28,7 @@
   },
   "engines" : { "node" : ">=6" },
   "dependencies": {
-    "eslint-config-pubnub": "^1.0.0"
+    "eslint-config-pubnub": "^1.0.0",
+    "superagent": "^3.0.0"
   }
 }
