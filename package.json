@@ -26,7 +26,9 @@
     "nock": "^9.0.2",
     "run-sequence": "^1.2.2"
   },
-  "engines" : { "node" : ">=6" },
+  "engines": {
+    "node": ">=6"
+  },
   "dependencies": {
     "eslint-config-pubnub": "^1.0.0",
     "superagent": "^3.0.0"

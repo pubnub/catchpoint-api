@@ -19,10 +19,10 @@ module.exports = class {
     this._config.accessToken = token;
   }
 
-  authorize(config) {
+  authorize({ clientId = '', clientSecret = '' }) {
     return new Promise((resolve, reject) => {
-      const clientId = (config.clientId || '').trim();
-      const clientSecret = (config.clientSecret || '').trim();
+      clientId = clientId.trim();
+      clientSecret = clientSecret.trim();
 
       if (!clientId) { return reject('clientId is missing'); }
       if (!clientSecret) { return reject('clientSecret is missing'); }
@@ -36,13 +36,4 @@ module.exports = class {
       return networking.post({ url: 'ui/api/token', body: postBody }, resolve, reject);
     });
   }
-
-  /*
-  getNodes(config) {
-    return new Promise((resolve, reject) => {
-
-      return this.GET
-    });
-  }
-      */
 };
