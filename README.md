@@ -84,7 +84,7 @@ JS based API wrapper to call catchpoint functionality (https://io.catchpoint.com
   })
 ```
 
-### Get specific node
+### Get specific node group
 * Requires authentication
 ```javascript
   catchPoint.nodeGroups.getById({id: 123}).then((response) => {
