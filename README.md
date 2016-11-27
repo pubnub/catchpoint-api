@@ -22,7 +22,7 @@ JS based API wrapper to call catchpoint functionality (https://io.catchpoint.com
 
 ## Authentication
 ```javascript
-  catchPoint.authorize({
+  catchPoint.authorization.createSession({
     clientId: 'myClientId',
     clientSecret: 'myClientSecret'
   }).then((response) => {

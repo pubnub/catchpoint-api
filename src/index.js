@@ -1,8 +1,6 @@
-
-const networking = require('./components/networking');
-
 const NodesAPI = require('./endpoints/nodes');
 const NodeGroupsAPI = require('./endpoints/node_groups');
+const AuthorizationAPI = require('./endpoints/authorize');
 
 module.exports = class {
 
@@ -13,27 +11,10 @@ module.exports = class {
     // mount endpoints;
     this.nodes = new NodesAPI(this._config);
     this.nodeGroups = new NodeGroupsAPI(this._config);
+    this.authorization = new AuthorizationAPI(this._config);
   }
 
   setAccessToken(token) {
     this._config.accessToken = token;
-  }
-
-  authorize({ clientId = '', clientSecret = '' }) {
-    return new Promise((resolve, reject) => {
-      clientId = clientId.trim();
-      clientSecret = clientSecret.trim();
-
-      if (!clientId) { return reject('clientId is missing'); }
-      if (!clientSecret) { return reject('clientSecret is missing'); }
-
-      const postBody = {
-        grant_type: 'client_credentials',
-        client_id: clientId,
-        client_secret: clientSecret
-      };
-
-      return networking.post({ url: 'ui/api/token', body: postBody }, resolve, reject);
-    });
   }
 };
