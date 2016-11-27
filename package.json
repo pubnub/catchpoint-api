@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "src/index.js",
-  "scripts": {
-    "codecov": "cat coverage/lcov.info | codecov"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pubnub/catchpoint-api.git"
