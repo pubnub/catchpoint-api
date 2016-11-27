@@ -1,5 +1,6 @@
 
 /* eslint no-console: 0, arrow-body-style: 0 */
+require('babel-core/register');
 
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');

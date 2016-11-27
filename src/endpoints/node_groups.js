@@ -14,14 +14,12 @@ module.exports = class {
     });
   }
 
-  getById(config) {
-    const executionConfig = config || {};
-
+  getById({ id } = {}) {
     return new Promise((resolve, reject) => {
       if (!this._config.accessToken) return reject('missing access token');
-      if (!executionConfig.id) return reject('node group id is missing');
+      if (!id) return reject('node group id is missing');
 
-      return networking.get({ url: `ui/api/v1/nodeGroups/${executionConfig.id}`, authToken: this._config.accessToken }, resolve, reject);
+      return networking.get({ url: `ui/api/v1/nodeGroups/${id}`, authToken: this._config.accessToken }, resolve, reject);
     });
   }
 
