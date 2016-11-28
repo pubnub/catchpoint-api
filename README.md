@@ -1,4 +1,4 @@
-# catchpoint-api
+# CatchPoint API - JS Wrapper
 [![Build Status](https://travis-ci.org/pubnub/catchpoint-api.svg?branch=master)](https://travis-ci.org/pubnub/catchpoint-api)
 [![codecov](https://codecov.io/gh/pubnub/catchpoint-api/branch/master/graph/badge.svg)](https://codecov.io/gh/pubnub/catchpoint-api)
 [![npm](https://img.shields.io/npm/v/catchpoint-api.svg)]()
