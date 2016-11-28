@@ -1,6 +1,6 @@
 {
   "name": "catchpoint-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "src/index.js",
   "repository": {
@@ -21,13 +21,13 @@
     "gulp-mocha": "^3.0.1",
     "isparta": "^4.0.0",
     "nock": "^9.0.2",
-    "run-sequence": "^1.2.2"
+    "run-sequence": "^1.2.2",
+    "eslint-config-pubnub": "^1.0.0"
   },
   "engines": {
     "node": ">=6"
   },
   "dependencies": {
-    "eslint-config-pubnub": "^1.0.0",
     "superagent": "^3.0.0"
   }
 }
