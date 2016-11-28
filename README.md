@@ -93,3 +93,65 @@ JS based API wrapper to call catchpoint functionality (https://io.catchpoint.com
     console.error(error);
   })
 ```
+
+## Folders
+### Get all folders with filtering.
+* Requires authentication
+```javascript
+
+  const filterParams = {
+    divisionId: 123, // optional
+    productId: 1234, // optional
+    parentFolderId: 1234, // optional
+    statusId: 12, // optional
+    name: 'name', // optional
+    pageNumber: 1, // optional
+    pageSize: 10 // optional
+  };
+
+  catchPoint.folders.getAll(filterParams).then((response) => {
+    console.log(response);
+  }).catch((error) => {
+    console.error(error);
+  })
+```
+
+### Get specific folder
+* Requires authentication
+```javascript
+  catchPoint.folders.getById({id: 123}).then((response) => {
+    console.log(response);
+  }).catch((error) => {
+    console.error(error);
+  })
+```
+
+## Products
+### Get all products with filtering.
+* Requires authentication
+```javascript
+
+  const filterParams = {
+    divisionId: 123, // optional
+    statusId: 12, // optional
+    name: 'name', // optional
+    pageNumber: 1, // optional
+    pageSize: 10 // optional
+  };
+
+  catchPoint.products.getAll(filterParams).then((response) => {
+    console.log(response);
+  }).catch((error) => {
+    console.error(error);
+  })
+```
+
+### Get specific product
+* Requires authentication
+```javascript
+  catchPoint.products.getById({id: 123}).then((response) => {
+    console.log(response);
+  }).catch((error) => {
+    console.error(error);
+  })
+```
