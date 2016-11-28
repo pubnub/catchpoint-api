@@ -16,7 +16,7 @@ module.exports = class {
         client_secret: clientSecret
       };
 
-      return networking.post({ url: 'ui/api/token', body: postBody }, resolve, reject);
+      return networking.post({ url: 'ui/api/token', body: postBody, postType: 'form' }, resolve, reject);
     });
   }
 };

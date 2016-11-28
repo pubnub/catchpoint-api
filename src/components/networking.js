@@ -27,6 +27,22 @@ const attachSuperagentLogger = (req) => {
   });
 };
 
+const commonRequestConfig = (requestConfig, request) => {
+  if (requestConfig.debug) {
+    request.use(attachSuperagentLogger);
+  }
+
+  if (requestConfig.authToken) {
+    const authHeader = `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`;
+
+    if (requestConfig.debug) {
+      console.log({ authHeader }); // eslint-disable-line no-console
+    }
+
+    request.set('Authorization', authHeader);
+  }
+};
+
 module.exports = {
   get: (requestConfig, resolve, reject) => {
     const request = superagent
@@ -34,19 +50,7 @@ module.exports = {
       .query(requestConfig.queryParams || {})
       .set('Accept', 'application/json');
 
-    if (requestConfig.debug) {
-      request.use(attachSuperagentLogger);
-    }
-
-    if (requestConfig.authToken) {
-      const authHeader = `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`;
-
-      if (requestConfig.debug) {
-        console.log({ authHeader }); // eslint-disable-line no-console
-      }
-
-      request.set('Authorization', authHeader);
-    }
+    commonRequestConfig(requestConfig, request);
 
     request
       .end((err, resp) => {
@@ -56,16 +60,22 @@ module.exports = {
   },
 
   post: (requestConfig, resolve, reject) => {
-    superagent
+    const request = superagent
       .post(`${path}/${requestConfig.url}`)
       .query(requestConfig.queryParams || {})
-      .type('application/x-www-form-urlencoded')
       // .use(attachSuperagentLogger)
-      .set('Accept', 'application/json')
-      .send(requestConfig.body)
-      .end((err, resp) => {
-        if (err) return reject(err);
-        return resolve(JSON.parse(resp.text));
-      });
-  }
+      .set('Accept', '*/*')
+      .send(requestConfig.body);
+
+    if (requestConfig.postType === 'form') {
+      request.type('application/x-www-form-urlencoded');
+    }
+
+    commonRequestConfig(requestConfig, request);
+
+    request.end((err, resp) => {
+      if (err) return reject(err);
+      return resolve(JSON.parse(resp.text));
+    });
+  },
 };
