@@ -51,7 +51,9 @@ module.exports = class {
         'name',
         'productId',
         'divisionId',
-        'testUrl'
+        'parentFolderId',
+        'testUrl',
+        'testHtml'
       ];
 
       fields.forEach((field) => {
@@ -92,7 +94,7 @@ module.exports = class {
 
       filters.forEach((queryElement) => {
         if (_.has(fetchParams, queryElement)) {
-          queryParams[queryElement] = fetchParams[queryElement].trim();
+          queryParams[queryElement] = fetchParams[queryElement];
         }
       });
 

@@ -1,6 +1,60 @@
 module.exports = {
   convertTestType: (testType) => {
     const config = {
+      web: {
+        id: 0,
+        name: 'Web'
+      },
+      transaction: {
+        id: 1,
+        name: 'Transaction'
+      },
+      htmlCode: {
+        id: 2,
+        name: 'HtmlCode'
+      },
+      ftp: {
+        id: 3,
+        name: 'Ftp'
+      },
+      tcp: {
+        id: 4,
+        name: 'Tcp'
+      },
+      dns: {
+        id: 5,
+        name: 'Dns'
+      },
+      ping: {
+        id: 6,
+        name: 'Ping'
+      },
+      smtp: {
+        id: 7,
+        name: 'Smtp'
+      },
+      api: {
+        id: 9,
+        name: 'Api'
+      },
+      streaming: {
+        id: 10,
+        name: 'Streaming'
+      },
+      ssh: {
+        id: 11,
+        name: 'Ssh'
+      },
+      traceroute: {
+        id: 12,
+        name: 'TraceRoute'
+      },
+    };
+
+    return config[testType];
+  },
+  convertMonitor: (monitorName) => {
+    const config = {
       object: {
         id: 2,
         name: 'Object'
@@ -84,60 +138,6 @@ module.exports = {
       tracerouteTcp: {
         id: 29,
         name: 'TraceRouteTcp'
-      },
-    };
-
-    return config[testType];
-  },
-  convertMonitor: (monitorName) => {
-    const config = {
-      web: {
-        id: 0,
-        name: 'Web'
-      },
-      transaction: {
-        id: 1,
-        name: 'Transaction'
-      },
-      htmlCode: {
-        id: 2,
-        name: 'HtmlCode'
-      },
-      ftp: {
-        id: 3,
-        name: 'Ftp'
-      },
-      tcp: {
-        id: 4,
-        name: 'Tcp'
-      },
-      dns: {
-        id: 5,
-        name: 'Dns'
-      },
-      ping: {
-        id: 6,
-        name: 'Ping'
-      },
-      smtp: {
-        id: 7,
-        name: 'Smtp'
-      },
-      api: {
-        id: 9,
-        name: 'Api'
-      },
-      streaming: {
-        id: 10,
-        name: 'Streaming'
-      },
-      ssh: {
-        id: 11,
-        name: 'Ssh'
-      },
-      traceroute: {
-        id: 12,
-        name: 'TraceRoute'
       },
     };
 

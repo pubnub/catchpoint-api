@@ -14,20 +14,20 @@
   },
   "homepage": "https://github.com/pubnub/catchpoint-api#readme",
   "devDependencies": {
-    "eslint": "^3.11.0",
+    "eslint": "^3.12.2",
+    "eslint-config-pubnub": "^1.0.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
     "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^3.0.1",
     "isparta": "^4.0.0",
     "nock": "^9.0.2",
-    "run-sequence": "^1.2.2",
-    "eslint-config-pubnub": "^1.0.0"
+    "run-sequence": "^1.2.2"
   },
   "engines": {
     "node": ">=6"
   },
   "dependencies": {
-    "superagent": "^3.0.0"
+    "request": "^2.79.0"
   }
 }
