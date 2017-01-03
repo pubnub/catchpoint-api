@@ -1,4 +1,5 @@
 const networking = require('../components/networking');
+const _ = require('lodash');
 
 module.exports = class {
 
@@ -28,8 +29,8 @@ module.exports = class {
       });
 
       ['divisionId', 'statusId', 'name', 'pageNumber', 'pageSize'].forEach((queryElement) => {
-        if ((fetchParams[queryElement] || '').trim().length > 0) {
-          requestParams.queryParams[queryElement] = fetchParams[queryElement].trim();
+        if (_.has(fetchParams, queryElement)) {
+          requestParams.queryParams[queryElement] = fetchParams[queryElement];
         }
       });
 
