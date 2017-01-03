@@ -15,11 +15,11 @@ module.exports = class {
       if (!this._config.accessToken) return reject('missing access token');
       if (!id) return reject('test id is missing');
 
-      return networking.get({
-        url: `ui/api/v1/tests/${id}`,
-        authToken: this._config.accessToken,
-        debug: this._config.debug
-      }, resolve, reject);
+      const requestParams = networking.createBaseRequestParams(this._config, {
+        url: `ui/api/v1/tests/${id}`
+      });
+
+      return networking.get(requestParams, resolve, reject);
     });
   }
 
@@ -51,7 +51,9 @@ module.exports = class {
         'name',
         'productId',
         'divisionId',
-        'testUrl'
+        'parentFolderId',
+        'testUrl',
+        'testHtml'
       ];
 
       fields.forEach((field) => {
@@ -60,13 +62,13 @@ module.exports = class {
         }
       });
 
-      return networking.post({
+      const requestParams = networking.createBaseRequestParams(this._config, {
         url: `ui/api/v1/tests/${updateParams.id}`,
-        authToken: this._config.accessToken,
-        debug: this._config.debug,
         postType: 'form',
-        body: JSON.stringify(postBody),
-      }, resolve, reject);
+        body: JSON.stringify(postBody)
+      });
+
+      return networking.post(requestParams, resolve, reject);
     });
   }
 
@@ -88,20 +90,17 @@ module.exports = class {
         'pageSize',
       ];
 
-      const queryParams = {};
+      const requestParams = networking.createBaseRequestParams(this._config, {
+        url: 'ui/api/v1/tests'
+      });
 
       filters.forEach((queryElement) => {
         if (_.has(fetchParams, queryElement)) {
-          queryParams[queryElement] = fetchParams[queryElement].trim();
+          requestParams.queryParams[queryElement] = fetchParams[queryElement];
         }
       });
 
-      return networking.get({
-        url: 'ui/api/v1/tests',
-        authToken: this._config.accessToken,
-        debug: this._config.debug,
-        queryParams
-      }, resolve, reject);
+      return networking.get(requestParams, resolve, reject);
     });
   }
 };

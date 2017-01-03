@@ -2,6 +2,10 @@ const networking = require('../components/networking');
 
 module.exports = class {
 
+  constructor(config) {
+    this._config = config;
+  }
+
   createSession({ clientId = '', clientSecret = '' } = {}) {
     return new Promise((resolve, reject) => {
       clientId = clientId.trim();
@@ -16,7 +20,13 @@ module.exports = class {
         client_secret: clientSecret
       };
 
-      return networking.post({ url: 'ui/api/token', body: postBody, postType: 'form' }, resolve, reject);
+      const requestParams = networking.createBaseRequestParams(this._config, {
+        url: 'ui/api/token',
+        body: postBody,
+        postType: 'form'
+      });
+
+      return networking.post(requestParams, resolve, reject);
     });
   }
 };

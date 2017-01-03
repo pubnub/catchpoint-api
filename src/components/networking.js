@@ -1,81 +1,88 @@
-const superagent = require('superagent');
+const request = require('request');
+const _ = require('lodash');
 
 const path = 'https://io.catchpoint.com';
 
-const attachSuperagentLogger = (req) => {
-  const _pickLogger = () => {
-    if (console && console.log) return console; // eslint-disable-line no-console
-    return console;
-  };
+const convertParamsKV = (input) => {
+  const response = [];
 
-  const start = new Date().getTime();
-  const timestamp = new Date().toISOString();
-  const logger = _pickLogger();
-  // console.log(req);
-  logger.log('<<<<<');                                          // eslint-disable-line no-console
-  logger.log(`[${timestamp}]`, '\n', req.url, '\n', req.qs);    // eslint-disable-line no-console
-  logger.log('-----');                                          // eslint-disable-line no-console
+  for (const objKey of Object.keys(input)) {
+    response.push({ name: objKey, value: input[objKey] });
+  }
 
-  req.on('response', (res) => {
-    const now = new Date().getTime();
-    const elapsed = now - start;
-    const timestampDone = new Date().toISOString();
+  return response;
+};
 
-    logger.log('>>>>>>');                                                                        // eslint-disable-line no-console
-    logger.log(`[${timestampDone} / ${elapsed}]`, '\n', req.url, '\n', req.qs, '\n', res.text);  // eslint-disable-line no-console
-    logger.log('-----');                                                                         // eslint-disable-line no-console
+const commonRequestConfig = (requestConfig, requestParams, resolve, reject) => {
+  if (requestConfig.authToken) {
+    const authHeader = `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`;
+    requestParams.har.headers.Authorization = authHeader;
+  }
+
+  requestParams.har.headers = convertParamsKV(requestParams.har.headers);
+
+  if (requestConfig.debug) {
+    console.log('-- outgoing har --', '\n', JSON.stringify(requestParams, 0, '\t'), '\n', '--     --'); //eslint-disable-line
+  }
+
+  request(requestParams, (error, response, body) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(JSON.parse(body));
+    }
   });
 };
 
-const commonRequestConfig = (requestConfig, request) => {
-  if (requestConfig.debug) {
-    request.use(attachSuperagentLogger);
-  }
+module.exports = {
+  createBaseRequestParams: (config, extraConfig) => {
+    const requestParams = {
+      queryParams: {},
+      authToken: config.accessToken,
+      debug: config.debug
+    };
 
-  if (requestConfig.authToken) {
-    const authHeader = `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`;
-
-    if (requestConfig.debug) {
-      console.log({ authHeader }); // eslint-disable-line no-console
+    if (extraConfig) {
+      _.assign(requestParams, extraConfig);
     }
 
-    request.set('Authorization', authHeader);
-  }
-};
-
-module.exports = {
+    return requestParams;
+  },
   get: (requestConfig, resolve, reject) => {
-    const request = superagent
-      .get(`${path}/${requestConfig.url}`)
-      .query(requestConfig.queryParams || {})
-      .set('Accept', 'application/json');
+    const requestParams = {
+      har: {
+        method: 'GET',
+        url: `${path}/${requestConfig.url}`,
+        qs: requestConfig.queryParams || {},
+        headers: { Accept: 'application/json' }
+      }
 
-    commonRequestConfig(requestConfig, request);
+    };
 
-    request
-      .end((err, resp) => {
-        if (err) return reject(err);
-        return resolve(JSON.parse(resp.text));
-      });
+    commonRequestConfig(requestConfig, requestParams, resolve, reject);
   },
 
   post: (requestConfig, resolve, reject) => {
-    const request = superagent
-      .post(`${path}/${requestConfig.url}`)
-      .query(requestConfig.queryParams || {})
-      // .use(attachSuperagentLogger)
-      .set('Accept', '*/*')
-      .send(requestConfig.body);
+    const requestParams = {
+      har: {
+        method: 'POST',
+        url: `${path}/${requestConfig.url}`,
+        qs: requestConfig.queryParams || {},
+        headers: { Accept: '*/*' },
+        postData: {
+          mimeType: 'application/x-www-form-urlencoded',
+          params: convertParamsKV(requestConfig.body)
+        }
+      }
+    };
 
-    if (requestConfig.postType === 'form') {
-      request.type('application/x-www-form-urlencoded');
-    }
+    commonRequestConfig(requestConfig, requestParams, resolve, reject);
 
-    commonRequestConfig(requestConfig, request);
-
+    /*
     request.end((err, resp) => {
       if (err) return reject(err);
       return resolve(JSON.parse(resp.text));
     });
+    */
   },
 };

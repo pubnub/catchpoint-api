@@ -7,11 +7,9 @@ const TestsAPI = require('./endpoints/tests');
 
 module.exports = class {
 
-  constructor() {
+  constructor({ debug = false } = {}) {
     this.version = 1;
-    this._config = {
-      debug: false
-    };
+    this._config = { debug };
 
     // mount endpoints;
     this.nodes = new NodesAPI(this._config);
