@@ -13,7 +13,11 @@ module.exports = class {
       if (!this._config.accessToken) return reject('missing access token');
       if (!id) return reject('folder id is missing');
 
-      return networking.get({ url: `ui/api/v1/folders/${id}`, authToken: this._config.accessToken, debug: this._config.debug }, resolve, reject);
+      const requestParams = networking.createBaseRequestParams(this._config, {
+        url: `ui/api/v1/folders/${id}`
+      });
+
+      return networking.get(requestParams, resolve, reject);
     });
   }
 
@@ -21,15 +25,17 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       if (!this._config.accessToken) return reject('missing access token');
 
-      const queryParams = {};
+      const requestParams = networking.createBaseRequestParams(this._config, {
+        url: 'ui/api/v1/folders'
+      });
 
       ['divisionId', 'productId', 'parentFolderId', 'statusId', 'name', 'pageNumber', 'pageSize'].forEach((queryElement) => {
         if (_.has(fetchParams, queryElement)) {
-          queryParams[queryElement] = fetchParams[queryElement];
+          requestParams.queryParams[queryElement] = fetchParams[queryElement];
         }
       });
 
-      return networking.get({ url: 'ui/api/v1/folders', authToken: this._config.accessToken, queryParams, debug: this._config.debug }, resolve, reject);
+      return networking.get(requestParams, resolve, reject);
     });
   }
 };

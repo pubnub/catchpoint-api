@@ -1,4 +1,5 @@
 const request = require('request');
+const _ = require('lodash');
 
 const path = 'https://io.catchpoint.com';
 
@@ -34,6 +35,19 @@ const commonRequestConfig = (requestConfig, requestParams, resolve, reject) => {
 };
 
 module.exports = {
+  createBaseRequestParams: (config, extraConfig) => {
+    const requestParams = {
+      queryParams: {},
+      authToken: config.accessToken,
+      debug: config.debug
+    };
+
+    if (extraConfig) {
+      _.assign(requestParams, extraConfig);
+    }
+
+    return requestParams;
+  },
   get: (requestConfig, resolve, reject) => {
     const requestParams = {
       har: {
