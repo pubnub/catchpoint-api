@@ -3,33 +3,56 @@ const _ = require('lodash');
 
 const path = 'https://io.catchpoint.com';
 
-const convertParamsKV = (input) => {
-  const response = [];
+const commonRequestConfig = (method, requestConfig, resolve, reject) => {
+  const consructedRequest = {
+    headers: requestConfig.headers
+  };
 
-  for (const objKey of Object.keys(input)) {
-    response.push({ name: objKey, value: input[objKey] });
-  }
-
-  return response;
-};
-
-const commonRequestConfig = (requestConfig, requestParams, resolve, reject) => {
   if (requestConfig.authToken) {
     const authHeader = `Bearer ${new Buffer(requestConfig.authToken).toString('base64')}`;
-    requestParams.har.headers.Authorization = authHeader;
+    consructedRequest.headers.Authorization = authHeader;
   }
 
-  requestParams.har.headers = convertParamsKV(requestParams.har.headers);
+  consructedRequest.method = method;
+  consructedRequest.uri = `${path}/${requestConfig.url}`;
+  consructedRequest.qs = requestConfig.queryParams;
+  consructedRequest.json = true;
+
+  if (requestConfig.postType === 'form') {
+    consructedRequest.form = requestConfig.body;
+  }
+
+  if (requestConfig.postType === 'json') {
+    consructedRequest.body = requestConfig.body;
+  }
 
   if (requestConfig.debug) {
-    console.log('-- outgoing har --', '\n', JSON.stringify(requestParams, 0, '\t'), '\n', '--     --'); //eslint-disable-line
+    console.log('-- outgoing request --', '\n', JSON.stringify(consructedRequest, 0, '\t'), '\n', '--     --'); //eslint-disable-line
   }
 
-  request(requestParams, (error, response, body) => {
+  request(consructedRequest, (error, response, body) => {
+    const responseStructure = {
+      pageNumber: 0,
+      items: [],
+      hasMore: false
+    };
+
     if (error) {
-      reject(error);
+      // overcome awkward catchpoint bug
+      if (error.code === 'HPE_INVALID_CONSTANT') {
+        return resolve(responseStructure);
+      } else {
+        return reject(error);
+      }
+    }
+
+    if (body.items && body.has_more) {
+      responseStructure.items = body.items;
+      responseStructure.hasMore = body.has_more;
+      responseStructure.pageNumber = body.page_number;
+      return resolve(responseStructure);
     } else {
-      resolve(JSON.parse(body));
+      return resolve(body);
     }
   });
 };
@@ -39,7 +62,8 @@ module.exports = {
     const requestParams = {
       queryParams: {},
       authToken: config.accessToken,
-      debug: config.debug
+      debug: config.debug,
+      headers: { Accept: 'application/json' }
     };
 
     if (extraConfig) {
@@ -49,40 +73,10 @@ module.exports = {
     return requestParams;
   },
   get: (requestConfig, resolve, reject) => {
-    const requestParams = {
-      har: {
-        method: 'GET',
-        url: `${path}/${requestConfig.url}`,
-        qs: requestConfig.queryParams || {},
-        headers: { Accept: 'application/json' }
-      }
-
-    };
-
-    commonRequestConfig(requestConfig, requestParams, resolve, reject);
+    commonRequestConfig('GET', requestConfig, resolve, reject);
   },
 
   post: (requestConfig, resolve, reject) => {
-    const requestParams = {
-      har: {
-        method: 'POST',
-        url: `${path}/${requestConfig.url}`,
-        qs: requestConfig.queryParams || {},
-        headers: { Accept: '*/*' },
-        postData: {
-          mimeType: 'application/x-www-form-urlencoded',
-          params: convertParamsKV(requestConfig.body)
-        }
-      }
-    };
-
-    commonRequestConfig(requestConfig, requestParams, resolve, reject);
-
-    /*
-    request.end((err, resp) => {
-      if (err) return reject(err);
-      return resolve(JSON.parse(resp.text));
-    });
-    */
+    commonRequestConfig('POST', requestConfig, resolve, reject);
   },
 };

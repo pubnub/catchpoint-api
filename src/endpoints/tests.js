@@ -33,7 +33,8 @@ module.exports = class {
   update(updateParams = {}) {
     return new Promise((resolve, reject) => {
       const timeNow = new Date();
-      let timeNowString = `${timeNow.getMonth()}/${timeNow.getDate()}/${timeNow.getFullYear()}`;
+      const currentMonth = timeNow.getMonth() + 1;
+      let timeNowString = `${currentMonth}/${timeNow.getDate()}/${timeNow.getFullYear()}`;
       timeNowString += ` ${timeNow.getHours()}:${timeNow.getMinutes()}:${timeNow.getSeconds()}`;
 
       const postBody = {
@@ -64,8 +65,8 @@ module.exports = class {
 
       const requestParams = networking.createBaseRequestParams(this._config, {
         url: `ui/api/v1/tests/${updateParams.id}`,
-        postType: 'form',
-        body: JSON.stringify(postBody)
+        postType: 'json',
+        body: postBody
       });
 
       return networking.post(requestParams, resolve, reject);
