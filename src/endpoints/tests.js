@@ -54,7 +54,9 @@ module.exports = class {
         'divisionId',
         'parentFolderId',
         'testUrl',
-        'testHtml'
+        'testHtml',
+        'to',
+        'alertSection'
       ];
 
       fields.forEach((field) => {
