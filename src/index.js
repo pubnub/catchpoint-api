@@ -4,6 +4,7 @@ const AuthorizationAPI = require('./endpoints/authorize');
 const FoldersAPI = require('./endpoints/folders');
 const ProductsAPI = require('./endpoints/products');
 const TestsAPI = require('./endpoints/tests');
+const PerformanceAPI = require('./endpoints/performance');
 
 module.exports = class {
 
@@ -18,6 +19,7 @@ module.exports = class {
     this.folders = new FoldersAPI(this._config);
     this.products = new ProductsAPI(this._config);
     this.tests = new TestsAPI(this._config);
+    this.performance = new PerformanceAPI(this._config);
   }
 
   setAccessToken(token) {
