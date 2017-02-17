@@ -56,6 +56,7 @@ module.exports = class {
         'testUrl',
         'testHtml',
         'to',
+        'script',
         'alertSection'
       ];
 
